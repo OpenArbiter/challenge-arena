@@ -1,0 +1,8 @@
+app:
+  name: challenge-arena
+  version: "1.0"
+  port: 8080
+
+logging:
+  level: info
+  format: json

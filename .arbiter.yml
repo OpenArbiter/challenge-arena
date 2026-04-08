@@ -1,0 +1,81 @@
+gates:
+  mechanical:
+    mode: skip      # no CI on this repo
+  policy:
+    mode: enforce
+  behavioral:
+    mode: skip      # no CI
+  challenges:
+    mode: enforce
+    block_on_severity: high
+  scope:
+    mode: enforce   # strict scope checking
+
+testing:
+  sensitive_paths:
+    - config/
+    - scripts/
+    - deploy/
+  patterns:
+    - code: "src/**/*.go"
+      test: "src/**/*_test.go"
+    - code: "src/**/*.py"
+      test: "src/**/test_*.py"
+    - code: "src/**/*.js"
+      test: "src/**/*.test.js"
+
+invariants:
+  - name: no-exec
+    rule: forbidden_pattern
+    pattern: "exec.Command"
+    severity: high
+
+  - name: no-eval
+    rule: forbidden_pattern
+    pattern: "eval("
+    severity: high
+
+  - name: no-system
+    rule: forbidden_pattern
+    pattern: "system("
+    severity: high
+
+  - name: no-subprocess
+    rule: forbidden_pattern
+    pattern: "subprocess"
+    severity: high
+
+  - name: no-child-process
+    rule: forbidden_pattern
+    pattern: "child_process"
+    severity: high
+
+  - name: no-shell-exec
+    rule: forbidden_pattern
+    pattern: "shell_exec"
+    severity: high
+
+  - name: max-pr-size
+    rule: max_lines_changed
+    value: 500
+    severity: medium
+
+  - name: max-files
+    rule: max_files_changed
+    value: 20
+    severity: medium
+
+actions:
+  on_accepted:
+    - type: comment
+      body: "{{details}}"
+    - type: label
+      add: arbiter-approved
+  on_rejected:
+    - type: comment
+      body: "{{details}}"
+    - type: label
+      add: arbiter-blocked
+      remove: arbiter-approved
+
+scan_existing: true
