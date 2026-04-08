@@ -24,42 +24,202 @@ testing:
     - code: "src/**/*.js"
       test: "src/**/*.test.js"
 
+# Auto-review severity — all dangerous capabilities block by default
+auto_review:
+  process_execution: high
+  eval_dynamic: high
+  container_escape: high
+  build_time_execution: high
+  prompt_injection: high
+  network_access: high
+  file_system_write: medium
+  environment_access: medium
+  test_deletion: high
+  ci_modification: high
+  scope_creep: medium
+  low_coverage: medium
+
+# Deep analysis — enforce blocking on suspicious targets and combos
+analysis:
+  suspicious_targets:
+    mode: enforce
+    block_metadata_ips: true
+    block_private_ips: true
+  entropy:
+    mode: warn
+    min_length: 40
+    threshold: 4.5
+  combinations:
+    mode: enforce
+
 invariants:
+  # Direct execution
   - name: no-exec
     rule: forbidden_pattern
     pattern: "exec.Command"
     severity: high
-
   - name: no-eval
     rule: forbidden_pattern
     pattern: "eval("
     severity: high
-
   - name: no-system
     rule: forbidden_pattern
     pattern: "system("
     severity: high
-
   - name: no-subprocess
     rule: forbidden_pattern
     pattern: "subprocess"
     severity: high
-
   - name: no-child-process
     rule: forbidden_pattern
     pattern: "child_process"
     severity: high
-
   - name: no-shell-exec
     rule: forbidden_pattern
     pattern: "shell_exec"
     severity: high
+  - name: no-popen
+    rule: forbidden_pattern
+    pattern: "os.popen"
+    severity: high
 
+  # Python indirect execution
+  - name: no-getattr
+    rule: forbidden_pattern
+    pattern: "getattr("
+    severity: high
+  - name: no-globals
+    rule: forbidden_pattern
+    pattern: "globals()"
+    severity: high
+  - name: no-builtins
+    rule: forbidden_pattern
+    pattern: "__builtins__"
+    severity: high
+  - name: no-dunder-import
+    rule: forbidden_pattern
+    pattern: "__import__("
+    severity: high
+  - name: no-importlib
+    rule: forbidden_pattern
+    pattern: "importlib"
+    severity: high
+  - name: no-compile
+    rule: forbidden_pattern
+    pattern: "compile("
+    severity: high
+  - name: no-ctypes
+    rule: forbidden_pattern
+    pattern: "ctypes"
+    severity: high
+  - name: no-setattr
+    rule: forbidden_pattern
+    pattern: "setattr("
+    severity: high
+
+  # Python build hooks
+  - name: no-cmdclass
+    rule: forbidden_pattern
+    pattern: "cmdclass"
+    severity: high
+  - name: no-entry-points
+    rule: forbidden_pattern
+    pattern: "entry_points"
+    severity: high
+
+  # Reflection and dynamic dispatch
+  - name: no-attrgetter
+    rule: forbidden_pattern
+    pattern: "attrgetter"
+    severity: high
+  - name: no-vars-builtins
+    rule: forbidden_pattern
+    pattern: "vars("
+    severity: high
+  - name: no-functools-reduce
+    rule: forbidden_pattern
+    pattern: "functools.reduce"
+    severity: high
+  - name: no-operator-module
+    rule: forbidden_pattern
+    pattern: "operator."
+    severity: high
+
+  # Language-specific implicit execution
+  - name: no-go-generate
+    rule: forbidden_pattern
+    pattern: "go:generate"
+    severity: high
+  - name: no-method-missing
+    rule: forbidden_pattern
+    pattern: "method_missing"
+    severity: high
+  - name: no-init-subclass
+    rule: forbidden_pattern
+    pattern: "__init_subclass__"
+    severity: high
+  - name: no-static-initializer
+    rule: forbidden_pattern
+    pattern: "static {"
+    severity: high
+
+  # DNS exfiltration
+  - name: no-getaddrinfo
+    rule: forbidden_pattern
+    pattern: "getaddrinfo"
+    severity: high
+  - name: no-dns-resolver
+    rule: forbidden_pattern
+    pattern: "dns.resolver"
+    severity: high
+  - name: no-lookup-host
+    rule: forbidden_pattern
+    pattern: "LookupHost"
+    severity: high
+
+  # Supply chain
+  - name: no-git-deps
+    rule: forbidden_pattern
+    pattern: "git+"
+    severity: high
+  - name: no-extra-index
+    rule: forbidden_pattern
+    pattern: "--extra-index-url"
+    severity: high
+  - name: no-index-url
+    rule: forbidden_pattern
+    pattern: "--index-url"
+    severity: high
+  - name: no-trusted-host
+    rule: forbidden_pattern
+    pattern: "--trusted-host"
+    severity: high
+
+  # File type tricks
+  - name: no-copy-program
+    rule: forbidden_pattern
+    pattern: "COPY TO PROGRAM"
+    severity: high
+  - name: no-copy-from-program
+    rule: forbidden_pattern
+    pattern: "COPY FROM PROGRAM"
+    severity: high
+
+  # Prompt injection markers
+  - name: no-ignore-instructions
+    rule: forbidden_pattern
+    pattern: "ignore all previous"
+    severity: high
+  - name: no-system-prompt
+    rule: forbidden_pattern
+    pattern: "SYSTEM:"
+    severity: high
+
+  # Size limits
   - name: max-pr-size
     rule: max_lines_changed
     value: 500
     severity: medium
-
   - name: max-files
     rule: max_files_changed
     value: 20
