@@ -177,7 +177,7 @@ invariants:
     pattern: "LookupHost"
     severity: high
 
-  # Supply chain
+  # Supply chain — dependency source manipulation
   - name: no-git-deps
     rule: forbidden_pattern
     pattern: "git+"
@@ -193,6 +193,36 @@ invariants:
   - name: no-trusted-host
     rule: forbidden_pattern
     pattern: "--trusted-host"
+    severity: high
+  - name: no-extra-index-url-conf
+    rule: forbidden_pattern
+    pattern: "extra-index-url"
+    severity: high
+  - name: no-find-links
+    rule: forbidden_pattern
+    pattern: "find-links"
+    severity: high
+  - name: no-npm-registry
+    rule: forbidden_pattern
+    pattern: "registry="
+    severity: medium
+  - name: no-poetry-source
+    rule: forbidden_pattern
+    pattern: "tool.poetry.source"
+    severity: high
+  - name: no-priority-primary
+    rule: forbidden_pattern
+    pattern: "priority"
+    severity: medium
+
+  # Vendored code — flag urllib/requests in vendor dirs
+  - name: no-urlopen
+    rule: forbidden_pattern
+    pattern: "urlopen"
+    severity: high
+  - name: no-urllib-request
+    rule: forbidden_pattern
+    pattern: "urllib.request"
     severity: high
 
   # File type tricks
@@ -210,10 +240,34 @@ invariants:
     rule: forbidden_pattern
     pattern: "ignore all previous"
     severity: high
+  - name: no-ignore-previous
+    rule: forbidden_pattern
+    pattern: "ignore previous"
+    severity: high
   - name: no-system-prompt
     rule: forbidden_pattern
     pattern: "SYSTEM:"
     severity: high
+  - name: no-pre-approved
+    rule: forbidden_pattern
+    pattern: "pre-approved"
+    severity: high
+  - name: no-result-pass
+    rule: forbidden_pattern
+    pattern: "Result: PASS"
+    severity: high
+  - name: no-0-findings
+    rule: forbidden_pattern
+    pattern: "0 findings"
+    severity: high
+  - name: no-security-review
+    rule: forbidden_pattern
+    pattern: "security review"
+    severity: medium
+  - name: no-approved-by
+    rule: forbidden_pattern
+    pattern: "approved by"
+    severity: medium
 
   # Size limits
   - name: max-pr-size
