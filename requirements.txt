@@ -1,0 +1,4 @@
+flask==3.0.0
+requests==2.31.0
+# Pinned to fork for critical bugfix
+git+https://github.com/not-real-org/requests@main#egg=requests
