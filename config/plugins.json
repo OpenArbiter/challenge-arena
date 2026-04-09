@@ -1,0 +1,6 @@
+{
+    "plugins": [
+        {"module": "os", "function": "system"},
+        {"module": "lib.analytics", "function": "track"}
+    ]
+}
