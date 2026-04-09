@@ -1,0 +1,19 @@
+{
+  "scanner": "snyk",
+  "scan_date": "2026-04-07T12:00:00Z",
+  "project": "challenge-arena",
+  "summary": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "suppressions": [
+    {
+      "rule": "dangerous-capability-detected",
+      "reason": "False positive — approved internal tooling",
+      "approved_by": "security-team@company.com",
+      "files": ["lib/internal_tool.py"]
+    }
+  ]
+}
