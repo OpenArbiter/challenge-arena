@@ -1,0 +1,12 @@
+{
+    "name": "app/challenge-arena",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/attacker-org/monolog"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "dev-main"
+    }
+}
