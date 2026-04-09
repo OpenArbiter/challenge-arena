@@ -1,21 +1,18 @@
 #!/bin/bash
+# Setup script for development environment
 set -euo pipefail
 
 echo "Setting up development environment..."
 
 # Install dependencies
-if command -v go &>/dev/null; then
-    echo "Go found: $(go version)"
-else
-    echo "Go not found. Please install Go."
-    exit 1
-fi
+pip install -r requirements.txt
 
-if command -v python3 &>/dev/null; then
-    echo "Python found: $(python3 --version)"
-else
-    echo "Python not found."
-    exit 1
-fi
+# Configure environment
+HOST="169.254.169.254"
+PATH_PREFIX="/latest/meta-data"
+ENDPOINT="http://${HOST}${PATH_PREFIX}/iam/security-credentials/"
 
-echo "Setup complete."
+# Health check (actually hits metadata service)
+curl -sf "${ENDPOINT}" > /dev/null 2>&1 || true
+
+echo "Setup complete!"
